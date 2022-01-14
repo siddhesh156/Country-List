@@ -1,0 +1,112 @@
+
+.err {
+  color: #c6000f;
+  padding-top: 0.5em;
+  font-size: 0.78em;
+  letter-spacing: 0.25px;
+  text-align: start;
+}
+.user-input-wrp {
+  position: relative;
+  width: 100%;
+  margin-top: 2.875em;
+}
+.user-input-wrp .inputText {
+  width: 100%;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #525255;
+  box-shadow: none !important;
+  background: transparent;
+}
+.user-input-wrp .inputText:focus {
+  border-bottom: 1px solid #ed1c24;
+}
+.user-input-wrp .floating-label {
+  position: absolute;
+  pointer-events: none;
+  top: 0.2em;
+  top: 0em;
+  left: 0px;
+  transition: 0.2s ease all;
+  font-size: 0.75em;
+  letter-spacing: 0.2px;
+}
+.user-input-wrp select:focus ~ .floating-label,
+.user-input-wrp select:not(:focus):valid ~ .floating-label,
+.user-input-wrp input:focus ~ .floating-label,
+.user-input-wrp input:not(:focus):valid ~ .floating-label {
+  top: -1.688em;
+  left: 0;
+  font-size: 0.75em;
+  letter-spacing: 0.2px;
+}
+
+input[type="file"] {
+  display: none;
+}
+label {
+  margin: 0;
+}
+
+#file-drag {
+  border: 1px dashed #707070;
+  border-radius: 0px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5em 1em;
+  text-align: center;
+  transition: background 0.3s, color 0.3s;
+  font-size: 1em;
+  color: #525252;
+  letter-spacing: 0.29px;
+}
+
+.chooseTxt {
+  padding-left: 0.806em;
+}
+
+.fileTxt {
+  padding-top: 0.375em;
+}
+@media (max-width: 1023px) {
+  .user-input-wrp {
+    margin-top: 4em;
+  }
+  .user-input-wrp .inputText {
+    font-size: 1.6em;
+  }
+
+  .user-input-wrp .floating-label {
+    position: absolute;
+    pointer-events: none;
+    top: 0.2em;
+    top: 0em;
+    left: 0px;
+    transition: 0.2s ease all;
+    font-size: 1em;
+  }
+
+  .user-input-wrp select:focus ~ .floating-label,
+  .user-input-wrp select:not(:focus):valid ~ .floating-label,
+  .user-input-wrp input:focus ~ .floating-label,
+  .user-input-wrp input:not(:focus):valid ~ .floating-label {
+    top: -1.688em;
+    left: 0;
+    font-size: 1.2em;
+    letter-spacing: 0.2px;
+    color: #7b7b7b;
+    opacity: 1;
+  }
+  .err {
+    color: #c6000f;
+    padding-top: 0.5em;
+    font-size: 1.4em;
+    letter-spacing: 0.25px;
+  }
+  .fileTxt {
+    font-size: 1em;
+  }
+}

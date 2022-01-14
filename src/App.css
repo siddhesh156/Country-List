@@ -1,0 +1,45 @@
+.d-f{
+  display: flex;
+}
+.f-c{
+  flex-direction: column;
+}
+
+.j-c{
+  justify-content: center;
+}
+
+.a-c{
+  align-items: flex-end;
+}
+
+.jc-sb{
+  justify-content: space-between;
+}
+
+.w-f{
+  width: 100%;
+}
+
+.ml-20{
+  margin-left: 15px;
+}
+.mr-20{
+  margin-right: 15px;
+}
+
+.f-w{
+  flex-wrap: wrap;
+}
+
+.as-c{
+  align-self: center;
+}
+
+.mt-10{
+  margin-top: 10px;
+}
+
+.ai-c{
+  align-items: center;
+}
