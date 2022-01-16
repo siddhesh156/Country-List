@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Modal,
-  Form,
-} from "react-bootstrap";
+import { Button, Modal, Form, Card } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import InputText from "../../components/InputText";
 import { updateCountry } from "../../Redux/CountryDetails/countryActions";
@@ -69,7 +65,7 @@ const CountryDetails = (props) => {
     setcountryImagePathError(false);
     if (!(countryRank !== "")) return setcountryRankError(true);
     setcountryRankError(false);
-    
+
     let obj = {
       id: `${countryData.length + 1}`,
       name: countryName,
@@ -78,14 +74,13 @@ const CountryDetails = (props) => {
       rank: countryRank,
     };
     dispatch(updateCountry(obj));
-    setcountryName("")
-    setcountryRank("")
-    setcountryImage("")
-    setcountryImagePath("")
-    setcountryContinent("")
+    setcountryName("");
+    setcountryRank("");
+    setcountryImage("");
+    setcountryImagePath("");
+    setcountryContinent("");
     setModalShow(false);
     //console.log({obj});
-
   };
 
   const handleSubmit = (event) => {
@@ -218,27 +213,38 @@ const CountryDetails = (props) => {
   }
 
   return (
-    <>
-      <h1>Country</h1>
+    <div className="main-container">
+      <h1>Country List</h1>
       <InputText
         dropdown
         value={selectedCountryId}
         list={countryData}
         onChange={handleCountryChange}
       />
-      {selectedCountryData && (
-        <div className="country-detail">
-          <div>{selectedCountryData.name}</div>
-          <div>
-            <img alt={selectedCountryData.name} src={selectedCountryData.flag}></img>
-          </div>
-          <div>{selectedCountryData.rank}</div>
-        </div>
-      )}
 
-      <Button variant="primary" onClick={() => setModalShow(true)}>
+      <Button
+        variant="primary"
+        style={{ alignSelf: "center", width: "70%" }}
+        onClick={() => setModalShow(true)}
+      >
         Add Country
       </Button>
+
+      {selectedCountryData && (
+        <div className="card-container">
+          <Card style={{ width: "20rem", background: "rgba(127,255,212,0.6)" }}>
+            <Card.Img
+              alt={selectedCountryData.name}
+              variant="top"
+              src={selectedCountryData.flag}
+            />
+            <Card.Body style={{ textAlign: "center" }}>
+              <Card.Title>{selectedCountryData.name}</Card.Title>
+              <Card.Text>{selectedCountryData.rank}</Card.Text>
+            </Card.Body>
+          </Card>
+        </div>
+      )}
 
       <MyVerticallyCenteredModal
         show={modalShow}
@@ -246,13 +252,21 @@ const CountryDetails = (props) => {
       />
 
       <style>{`
-        .country-detail {
+      .main-container{
+        margin: 5% 20%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      h1 { color: #7c795d; font-family: 'Trocchi', serif; font-size: 45px; font-weight: normal; line-height: 48px; margin: 0; }
+      
+        .card-container{
           display: flex;
-          flex-direction: column;
-          justify-content: space-between;
+          justify-content: center;
+          margin-top: 2%
         }
       `}</style>
-    </>
+    </div>
   );
 };
 export default CountryDetails;

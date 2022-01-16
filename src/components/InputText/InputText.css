@@ -8,8 +8,10 @@
 }
 .user-input-wrp {
   position: relative;
-  width: 100%;
+  width: 80%;
   margin-top: 2.875em;
+  align-self: center;
+  margin-bottom: 25px;
 }
 .user-input-wrp .inputText {
   width: 100%;
