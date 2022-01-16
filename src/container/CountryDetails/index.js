@@ -6,7 +6,8 @@ import {
   FormControl,
   Form,
   FormGroup,
-  FormFile,
+  FormText,
+  Row,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import InputText from "../../components/InputText";
@@ -19,10 +20,15 @@ const CountryDetails = (props) => {
   const [selectedCountryData, setSelectedCountryData] = useState();
   const [modalShow, setModalShow] = useState(true);
   const [countryName, setcountryName] = useState("");
-  const [countryImage, setcountryImage] = useState("");
+  const [countryImage, setcountryImage] = useState("Choose File");
   const [countryImagePath, setcountryImagePath] = useState("");
   const [countryRank, setcountryRank] = useState("");
   const [countryContinent, setcountryContinent] = useState("");
+  const [validated, setValidated] = useState(false);
+  const [countryNameError, setcountryNameError] = useState(false);
+  const [countryContinentError, setcountryContinentError] = useState(false);
+  const [countryImagePathError, setcountryImagePathError] = useState(false);
+  const [countryRankError, setcountryRankError] = useState(false);
 
   const handleCountryChange = (e) => {
     setSelectedCountryData(
@@ -30,8 +36,6 @@ const CountryDetails = (props) => {
     );
     setSelectedCountryId(e.target.value);
   };
-
-  //   console.log({ selectedCountryData });
 
   const updateName = (e) => {
     let value = e.target.value;
@@ -59,7 +63,18 @@ const CountryDetails = (props) => {
     let value = e.target.value;
     setcountryContinent(value);
   };
+
   const AddCountry = (e) => {
+    if (!(countryName.length > 3 && countryName.length < 20))
+      return setcountryNameError(true);
+    setcountryNameError(false);
+    if (!(countryContinent !== "")) return setcountryContinentError(true);
+    setcountryContinentError(false);
+    if (!(countryImagePath !== "")) return setcountryImagePathError(true);
+    setcountryImagePathError(false);
+    if (!(countryRank !== "")) return setcountryRankError(true);
+    setcountryRankError(false);
+    
     let obj = {
       id: `${countryData.length + 1}`,
       name: countryName,
@@ -68,8 +83,24 @@ const CountryDetails = (props) => {
       rank: countryRank,
     };
     dispatch(updateCountry(obj));
+    setcountryName("")
+    setcountryRank("")
+    setcountryImage("")
+    setcountryImagePath("")
+    setcountryContinent("")
     setModalShow(false);
-    //console.log({obj});
+    console.log({obj});
+
+  };
+
+  const handleSubmit = (event) => {
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    setValidated(true);
   };
 
   function MyVerticallyCenteredModal(props) {
@@ -85,71 +116,108 @@ const CountryDetails = (props) => {
             Add Country
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <InputGroup className="mb-3">
-            <FormControl
-              required
-              placeholder="Country Name"
-              aria-label="Country Name"
-              aria-describedby="basic-addon1"
-              minLength="3"
-              maxLength="20"
-              value={countryName}
-              onChange={(e) => {
-                updateName(e);
-              }}
-            />
-          </InputGroup>
-          <InputGroup className="mb-3">
-            <FormControl
-              required
-              as="select"
-              custom
-              value={countryContinent}
-              onChange={(e) => updateContinet(e)}
-            >
-              <option></option>
-              <option>Oceania</option>
-              <option>Europe</option>
-              <option>Africa</option>
-              <option>Asia</option>
-            </FormControl>
-          </InputGroup>
-          <InputGroup className="mb-5">
-            <Form.Group>
-              <Form.File
-                type="file"
-                className="custom-file-label"
-                id="inputGroupFile01"
-                label={countryImage}
-                onChange={(e) => updateImage(e)}
-                custom
+        <Form
+          noValidate
+          validated={validated}
+          onSubmit={(e) => handleSubmit(e)}
+        >
+          <Modal.Body>
+            <Form.Group className="mb-3" controlId="validationCustom01">
+              <Form.Control
+                required
+                type="text"
+                placeholder="Country Name"
+                aria-label="Country Name"
+                aria-describedby="basic-addon1"
+                minLength="4"
+                maxLength="20"
+                value={countryName}
+                isInvalid={countryNameError}
+                onChange={(e) => {
+                  updateName(e);
+                }}
               />
+              <Form.Control.Feedback type="invalid">
+                Please provide a valid country name.
+              </Form.Control.Feedback>
             </Form.Group>
-          </InputGroup>
 
-          <InputGroup className="mb-3">
-            <FormControl
-              placeholder="Country Rank"
-              aria-label="Country Rank"
-              aria-describedby="basic-addon1"
-              required
-              type="number"
-              minLength="1"
-              maxLength="2"
-              value={countryRank}
-              onChange={(e) => {
-                updateRank(e);
-              }}
+            <Form.Group className="mb-3" controlId="validationCustom02">
+              <Form.Control
+                required
+                as="select"
+                placeholder="Select Country Continent"
+                aria-label="Select Country Continent"
+                value={countryContinent}
+                isInvalid={countryContinentError}
+                onChange={(e) => updateContinet(e)}
+              >
+                <option></option>
+                <option>Oceania</option>
+                <option>Europe</option>
+                <option>Africa</option>
+                <option>Asia</option>
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                Please select a continent.
+              </Form.Control.Feedback>
+            </Form.Group>
+
+            <input
+              id="inputGroupFile01"
+              accept="image/jpg"
+              type="file"
+              onChange={(e) => updateImage(e)}
+              name="passport_proof_upload"
             />
-          </InputGroup>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button className="btn btn-danger" onClick={AddCountry}>
-            Add
-          </Button>
-          <Button onClick={props.onHide}>Close</Button>
-        </Modal.Footer>
+
+            <label for="inputGroupFile01" className="d-f" id="file-drag">
+              <div className="chooseTxt">{countryImage}</div>
+            </label>
+
+            <div
+              className="invalid-feedback"
+              style={{ display: countryImagePathError ? "block" : "none" }}
+            >
+              Please provide a valid country image.
+            </div>
+
+            <div className="d-f jc-sb">
+              <div className="fileTxt">File Format : JPG / PNG </div>
+              <div className="fileTxt">File Size: Less than 4 MB</div>
+            </div>
+
+            <Form.Group className="mb-3" controlId="validationCustom04">
+              <Form.Control
+                placeholder="Country Rank"
+                aria-label="Country Rank"
+                aria-describedby="basic-addon1"
+                required
+                type="number"
+                minLength="1"
+                maxLength="2"
+                value={countryRank}
+                isInvalid={countryRankError}
+                onChange={(e) => {
+                  updateRank(e);
+                }}
+              />
+              <Form.Control.Feedback type="invalid">
+                Please provide a rank.
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              type="submit"
+              className="btn btn-danger"
+              onClick={AddCountry}
+            >
+              Add
+            </Button>
+            <Button onClick={props.onHide}>Close</Button>
+          </Modal.Footer>
+        </Form>
       </Modal>
     );
   }
@@ -166,7 +234,9 @@ const CountryDetails = (props) => {
       {selectedCountryData && (
         <div className="country-detail">
           <div>{selectedCountryData.name}</div>
-          {/* <div><img src={require(selectedCountryData.flag).default}></img></div> */}
+          <div>
+            <img src={selectedCountryData.flag}></img>
+          </div>
           <div>{selectedCountryData.rank}</div>
         </div>
       )}
@@ -180,9 +250,7 @@ const CountryDetails = (props) => {
         onHide={() => setModalShow(false)}
       />
 
-      {/* <img id="country-img"></img> */}
-
-      <style jsx>{`
+      <style>{`
         .country-detail {
           display: flex;
           flex-direction: column;

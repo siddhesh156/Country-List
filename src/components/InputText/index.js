@@ -1,6 +1,6 @@
 import React from "react";
 import "./InputText.css";
-import upload from "../../images/upload.svg";
+// import upload from "../../images/upload.svg";
 const InputText = (props) => {
   //console.log(props);
   if (props.dropdown) {
@@ -26,47 +26,47 @@ const InputText = (props) => {
           >
             {optionList}
           </select>
-          <span class="floating-label">{props.title}</span>
+          <span className="floating-label">{props.title}</span>
         </div>
       </>
     );
   }
-  if (props.chooseFile) {
-    return (
-      <>
-        <input
-          id={props.id}
-          accept="image/jpg ,application/pdf,.doc,.docx"
-          type="file"
-          onChange={props.onChange}
-          name="passport_proof_upload"
-        />
-        {props.text ? (
-          <label
-            style={{ border: "none" }}
-            for={props.id}
-            className="d-f"
-            id="file-drag"
-          >
-            <img src={upload} class="img-fluid" />
-            <div class="chooseTxt">Choose File</div>
-          </label>
-        ) : (
-          <label for={props.id} className="d-f" id="file-drag">
-            <img src={upload} class="img-fluid" />
-            <div class="chooseTxt">Choose File</div>
-          </label>
-        )}
+  // if (props.chooseFile) {
+  //   return (
+  //     <>
+  //       <input
+  //         id={props.id}
+  //         accept="image/jpg ,application/pdf,.doc,.docx"
+  //         type="file"
+  //         onChange={props.onChange}
+  //         name="passport_proof_upload"
+  //       />
+  //       {props.text ? (
+  //         <label
+  //           style={{ border: "none" }}
+  //           for={props.id}
+  //           className="d-f"
+  //           id="file-drag"
+  //         >
+  //           <img src={upload} className="img-fluid" />
+  //           <div className="chooseTxt">Choose File</div>
+  //         </label>
+  //       ) : (
+  //         <label for={props.id} className="d-f" id="file-drag">
+  //           <img src={upload} className="img-fluid" />
+  //           <div className="chooseTxt">Choose File</div>
+  //         </label>
+  //       )}
 
-        {props.text ? null : (
-          <div className="d-f jc-sb">
-            <div className="fileTxt">File Format : JPG / PDF / DOC</div>
-            <div className="fileTxt">File Size: Less than 2 MB</div>
-          </div>
-        )}
-      </>
-    );
-  }
+  //       {props.text ? null : (
+  //         <div className="d-f jc-sb">
+  //           <div className="fileTxt">File Format : JPG / PDF / DOC</div>
+  //           <div className="fileTxt">File Size: Less than 2 MB</div>
+  //         </div>
+  //       )}
+  //     </>
+  //   );
+  // }
 
   return (
     <div className="user-input-wrp">
