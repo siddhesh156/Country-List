@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
-import accountReducer from './AccountDetails/accountReducer'
+import countryReducer from './CountryDetails/countryReducer'
 const rootReducer = combineReducers({
-    accountDetails: accountReducer,
+    countryDetails: countryReducer,
 })
 
 export default rootReducer

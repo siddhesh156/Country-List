@@ -1,24 +1,19 @@
-import React, { useState, useMemo, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Modal,
-  InputGroup,
-  FormControl,
   Form,
-  FormGroup,
-  FormText,
-  Row,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import InputText from "../../components/InputText";
-import { updateCountry } from "../../Redux/AccountDetails/accountActions";
+import { updateCountry } from "../../Redux/CountryDetails/countryActions";
 
 const CountryDetails = (props) => {
   const dispatch = useDispatch();
-  const countryData = useSelector((state) => state.accountDetails.countryData);
+  const countryData = useSelector((state) => state.countryDetails.countryData);
   const [selectedCountryId, setSelectedCountryId] = useState("");
   const [selectedCountryData, setSelectedCountryData] = useState();
-  const [modalShow, setModalShow] = useState(true);
+  const [modalShow, setModalShow] = useState(false);
   const [countryName, setcountryName] = useState("");
   const [countryImage, setcountryImage] = useState("Choose File");
   const [countryImagePath, setcountryImagePath] = useState("");
@@ -89,7 +84,7 @@ const CountryDetails = (props) => {
     setcountryImagePath("")
     setcountryContinent("")
     setModalShow(false);
-    console.log({obj});
+    //console.log({obj});
 
   };
 
@@ -235,7 +230,7 @@ const CountryDetails = (props) => {
         <div className="country-detail">
           <div>{selectedCountryData.name}</div>
           <div>
-            <img src={selectedCountryData.flag}></img>
+            <img alt={selectedCountryData.name} src={selectedCountryData.flag}></img>
           </div>
           <div>{selectedCountryData.rank}</div>
         </div>
