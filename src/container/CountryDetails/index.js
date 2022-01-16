@@ -38,10 +38,11 @@ const CountryDetails = (props) => {
     var fReader = new FileReader();
     fReader.readAsDataURL(input.files[0]);
     fReader.onloadend = function (event) {
-      //var img = document.getElementById("country-img");
-      //img.src = event.target.result;
+      let imgSize = event.total / 1024 / 1024;
+      if (imgSize > 4) {
+        return setcountryImagePathError(true);
+      }
       setcountryImagePath(event.target.result);
-      //console.log('path', event.target.result);
     };
     setcountryImage(value);
   };
@@ -55,32 +56,50 @@ const CountryDetails = (props) => {
     setcountryContinent(value);
   };
 
-  const AddCountry = (e) => {
-    if (!(countryName.length > 3 && countryName.length < 20))
-      return setcountryNameError(true);
+  const AddCountry = () => {
+    let isValid = false;
+    if (!(countryName.length > 2 && countryName.length < 20)) {
+      isValid = true;
+      setcountryNameError(true);
+    }
+
     setcountryNameError(false);
-    if (!(countryContinent !== "")) return setcountryContinentError(true);
+
+    if (!(countryContinent !== "")) {
+      isValid = true;
+      setcountryContinentError(true);
+    }
+
     setcountryContinentError(false);
-    if (!(countryImagePath !== "")) return setcountryImagePathError(true);
+
+    if (!(countryImagePath !== "")) {
+      isValid = true;
+      setcountryImagePathError(true);
+    }
+
     setcountryImagePathError(false);
-    if (!(countryRank !== "")) return setcountryRankError(true);
+
+    if (!(countryRank !== "")) {
+      isValid = true;
+      setcountryRankError(true);
+    }
     setcountryRankError(false);
 
-    let obj = {
-      id: `${countryData.length + 1}`,
-      name: countryName,
-      continent: countryContinent,
-      flag: countryImagePath,
-      rank: countryRank,
-    };
-    dispatch(updateCountry(obj));
-    setcountryName("");
-    setcountryRank("");
-    setcountryImage("");
-    setcountryImagePath("");
-    setcountryContinent("");
-    setModalShow(false);
-    //console.log({obj});
+    if (!isValid) {
+      let obj = {
+        id: `${countryData.length + 1}`,
+        name: countryName,
+        continent: countryContinent,
+        flag: countryImagePath,
+        rank: countryRank,
+      };
+      dispatch(updateCountry(obj));
+      setcountryName("");
+      setcountryRank("");
+      setcountryImagePath("");
+      setcountryContinent("");
+      setModalShow(false);
+    }
   };
 
   const handleSubmit = (event) => {
@@ -89,14 +108,59 @@ const CountryDetails = (props) => {
       event.preventDefault();
       event.stopPropagation();
     }
-
+    if (!(countryImagePath !== "")) {
+      setcountryImagePathError(true);
+      event.preventDefault();
+      event.stopPropagation();
+    }
     setValidated(true);
   };
 
-  function MyVerticallyCenteredModal(props) {
-    return (
+  return (
+    <div className="main-container">
+      <h1>Country List</h1>
+      <InputText
+        dropdown
+        value={selectedCountryId}
+        list={countryData}
+        onChange={handleCountryChange}
+      />
+
+      <Button
+        variant="dark"
+        style={{ alignSelf: "center", width: "70%" }}
+        onClick={() => setModalShow(true)}
+      >
+        Add Country
+      </Button>
+
+      {selectedCountryData && (
+        <div className="card-container">
+          <Card
+            style={{ width: "20rem", background: "#7c795d", color: "white" }}
+          >
+            <Card.Img
+              alt={selectedCountryData.name}
+              variant="top"
+              src={selectedCountryData.flag}
+            />
+            <Card.Body
+              style={{
+                textAlign: "center",
+                color: "rgb(247, 154, 12)",
+                fontFamily: "Trocchi, serif",
+              }}
+            >
+              <Card.Title>{selectedCountryData.name}</Card.Title>
+              <Card.Text>{selectedCountryData.rank}</Card.Text>
+            </Card.Body>
+          </Card>
+        </div>
+      )}
+
       <Modal
-        {...props}
+        show={modalShow}
+        onHide={() => setModalShow(false)}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
@@ -201,57 +265,25 @@ const CountryDetails = (props) => {
             <Button
               type="submit"
               className="btn btn-danger"
-              onClick={AddCountry}
+              onClick={() => AddCountry()}
             >
               Add
             </Button>
-            <Button onClick={props.onHide}>Close</Button>
           </Modal.Footer>
         </Form>
       </Modal>
-    );
-  }
-
-  return (
-    <div className="main-container">
-      <h1>Country List</h1>
-      <InputText
-        dropdown
-        value={selectedCountryId}
-        list={countryData}
-        onChange={handleCountryChange}
-      />
-
-      <Button
-        variant="primary"
-        style={{ alignSelf: "center", width: "70%" }}
-        onClick={() => setModalShow(true)}
-      >
-        Add Country
-      </Button>
-
-      {selectedCountryData && (
-        <div className="card-container">
-          <Card style={{ width: "20rem", background: "rgba(127,255,212,0.6)" }}>
-            <Card.Img
-              alt={selectedCountryData.name}
-              variant="top"
-              src={selectedCountryData.flag}
-            />
-            <Card.Body style={{ textAlign: "center" }}>
-              <Card.Title>{selectedCountryData.name}</Card.Title>
-              <Card.Text>{selectedCountryData.rank}</Card.Text>
-            </Card.Body>
-          </Card>
-        </div>
-      )}
-
-      <MyVerticallyCenteredModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-      />
 
       <style>{`
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-color: rgba(254,250,216,1);
+      }
+      
       .main-container{
         margin: 5% 20%;
         display: flex;
@@ -263,7 +295,7 @@ const CountryDetails = (props) => {
         .card-container{
           display: flex;
           justify-content: center;
-          margin-top: 2%
+          margin-top: 5%
         }
       `}</style>
     </div>
